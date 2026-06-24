@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOLE – Premium Footwear</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0F172A;
+      --white: #FFFFFF;
+      --accent: #D4AF37;
+      --muted: #9aa3b5;
+      --card-bg: #16213a;
+      --border: #28324a;
+      --gray: #F8F9FA;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(13,13,13,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem; letter-spacing: 4px; color: var(--white);
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a {
+      text-decoration: none; color: var(--muted);
+      font-size: 0.85rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-right { display: flex; gap: 1.4rem; align-items: center; }
+    .btn-cart {
+      position: relative; background: none; border: 1px solid var(--border);
+      color: var(--white); padding: 0.55rem 1.1rem; border-radius: 4px;
+      cursor: pointer; font-size: 0.85rem; letter-spacing: 1px;
+      transition: border-color 0.2s;
+    }
+    .btn-cart:hover { border-color: var(--accent); }
+    .cart-count {
+      position: absolute; top: -8px; right: -8px;
+      background: var(--accent); color: #fff; font-size: 0.65rem;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-weight: 600;
+    }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); transition: 0.3s; }
+
+    /* ── HERO (full-screen premium) ── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex; align-items: center;
+      padding: 0 3rem;
+      background: url('https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=1600&auto=format&fit=crop&q=80') center/cover no-repeat;
+      isolation: isolate;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0;
+      background: linear-gradient(120deg, rgba(15,23,42,0.93) 0%, rgba(15,23,42,0.75) 45%, rgba(15,23,42,0.4) 100%);
+    }
+    .hero-text { position: relative; z-index: 1; animation: heroIn 1s ease both; }
+    @keyframes heroIn { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-eyebrow { color: var(--accent); letter-spacing: 4px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; display: block; margin-bottom: 1rem; }
+    .hero-text { max-width: 620px; }
+
+    /* ── TRUST BAR ── */
+    .trust-bar {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem;
+      padding: 2.4rem 3rem; background: var(--card-bg); border-bottom: 1px solid var(--border);
+    }
+    .trust-item { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; text-align: center; }
+    .trust-item .ti-icon { font-size: 1.8rem; }
+    .trust-item .ti-label { font-size: 0.85rem; font-weight: 600; letter-spacing: 0.5px; }
+    .trust-item .ti-sub { font-size: 0.72rem; color: var(--muted); }
+
+    /* ── REVIEWS ── */
+    .review-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.6rem; }
+    .review-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 1.8rem; }
+    .review-stars { color: var(--accent); font-size: 1rem; margin-bottom: 0.8rem; letter-spacing: 2px; }
+    .review-text { color: var(--white); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1rem; }
+    .review-author { display: flex; align-items: center; gap: 0.7rem; }
+    .review-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--accent); color: var(--black); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; }
+    .review-name { font-weight: 600; font-size: 0.88rem; }
+    .review-loc { font-size: 0.75rem; color: var(--muted); }
+
+    /* ── NEWSLETTER ── */
+    .newsletter { text-align: center; }
+    .newsletter-form { display: flex; gap: 0.8rem; max-width: 440px; margin: 1.5rem auto 0; }
+    .newsletter-form input { flex: 1; padding: 0.85rem 1.1rem; border-radius: 4px; border: 1px solid var(--border); background: #0a0e1a; color: var(--white); }
+    .newsletter-form input::placeholder { color: var(--muted); }
+
+    /* ── QUICK VIEW MODAL ── */
+    .qv-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 400; opacity: 0; pointer-events: none; transition: opacity 0.25s; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .qv-overlay.open { opacity: 1; pointer-events: all; }
+    .qv-modal { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; max-width: 760px; width: 100%; max-height: 88vh; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 0; position: relative; }
+    .qv-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--white); font-size: 1.4rem; cursor: pointer; z-index: 2; }
+    .qv-img-col { background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%); display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+    .qv-img-col img { width: 100%; border-radius: 8px; object-fit: cover; }
+    .qv-info { padding: 2rem; }
+    .qv-brand { color: var(--accent); letter-spacing: 2px; font-size: 0.75rem; text-transform: uppercase; }
+    .qv-name { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 1px; margin: 0.4rem 0; }
+    .qv-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--accent); }
+    .qv-price .qv-orig { font-size: 1.1rem; color: var(--muted); text-decoration: line-through; margin-left: 8px; }
+    .qv-swatches { display: flex; gap: 0.6rem; margin: 1.2rem 0; }
+    .qv-swatch { width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; }
+    .qv-swatch.active { border-color: var(--accent); }
+    .qv-sizes { display: flex; gap: 0.5rem; margin: 1rem 0; flex-wrap: wrap; }
+    .qv-size { border: 1px solid var(--border); padding: 0.4rem 0.9rem; border-radius: 4px; font-size: 0.85rem; cursor: pointer; }
+    .qv-size.active, .qv-size:hover { border-color: var(--accent); color: var(--accent); }
+    .qv-meta { font-size: 0.85rem; color: var(--muted); margin-top: 1.2rem; line-height: 1.8; }
+    .hero-text h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 9vw, 8rem);
+      line-height: 0.92; letter-spacing: 2px;
+    }
+    .hero-text h1 em { color: var(--accent); font-style: normal; }
+    .hero-text p {
+      margin-top: 1.8rem; font-size: 1rem; color: var(--muted);
+      line-height: 1.7; max-width: 420px;
+    }
+    .hero-btns { display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--accent); color: #fff; border: none;
+      padding: 0.9rem 2.2rem; font-size: 0.9rem; font-weight: 600;
+      letter-spacing: 1.5px; text-transform: uppercase; border-radius: 4px;
+      cursor: pointer; transition: opacity 0.2s; text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-outline {
+      background: transparent; color: var(--white);
+      border: 1px solid var(--white); padding: 0.9rem 2.2rem;
+      font-size: 0.9rem; font-weight: 600; letter-spacing: 1.5px;
+      text-transform: uppercase; border-radius: 4px; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s; text-decoration: none; display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+    .hero-img {
+      display: flex; justify-content: center; align-items: center;
+      position: relative;
+    }
+    .hero-shoe-wrap {
+      width: 460px; height: 460px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 60%, #2a1a14 0%, #1a0d0a 60%, transparent 100%);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+    .hero-shoe-wrap::before {
+      content: '';
+      position: absolute; bottom: 30px;
+      width: 280px; height: 30px;
+      background: radial-gradient(ellipse, rgba(232,68,26,0.35) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: float-shadow 4s ease-in-out infinite;
+    }
+    @keyframes float-shadow {
+      0%, 100% { transform: scaleX(1); opacity: 0.6; }
+      50% { transform: scaleX(0.75); opacity: 0.3; }
+    }
+    .hero-shoe-emoji { font-size: 10rem; filter: drop-shadow(0 20px 40px rgba(232,68,26,0.4)); }
+    .hero-shoe-img { width: 340px; height: 300px; object-fit: contain; filter: drop-shadow(0 24px 48px rgba(232,68,26,0.5)); animation: float 4s ease-in-out infinite; }
+    .hero-badge {
+      position: absolute; top: 2rem; right: -1rem;
+      background: var(--accent); color: #fff;
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px;
+      padding: 0.6rem 1rem; border-radius: 4px;
+      transform: rotate(8deg);
+    }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap {
+      overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 1rem 0; background: var(--card-bg);
+    }
+    .marquee-track {
+      display: flex; gap: 4rem; white-space: nowrap;
+      animation: marquee 20s linear infinite;
+    }
+    .marquee-track span {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 3px;
+      color: var(--muted);
+    }
+    .marquee-track span.dot { color: var(--accent); font-size: 0.6rem; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── SECTION HEADER ── */
+    .sec-header { text-align: center; margin-bottom: 3rem; }
+    .sec-eyebrow {
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 4px;
+      color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 0.8rem;
+    }
+    .sec-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem);
+      letter-spacing: 2px; line-height: 1;
+    }
+
+    /* ── FILTER BAR ── */
+    section { padding: 5rem 3rem; }
+    .filter-bar {
+      display: flex; gap: 0.8rem; flex-wrap: wrap; justify-content: center; margin-bottom: 3rem;
+    }
+    .filter-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--muted);
+      padding: 0.5rem 1.4rem; border-radius: 20px; font-size: 0.82rem;
+      letter-spacing: 0.5px; cursor: pointer; transition: all 0.2s;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      border-color: var(--accent); color: var(--white); background: rgba(232,68,26,0.12);
+    }
+
+    /* ── PRODUCT GRID ── */
+    .product-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.8rem;
+    }
+    .product-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
+      overflow: hidden; cursor: pointer; transition: transform 0.25s, border-color 0.25s;
+      position: relative;
+    }
+    .product-card:hover { transform: translateY(-6px); border-color: #3a3a3a; }
+    .card-img {
+      height: 200px; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #1f1f1f 0%, #2a2a2a 100%);
+      position: relative; overflow: hidden;
+    }
+    .card-badge {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--accent); color: #fff; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 1px; padding: 0.25rem 0.6rem; border-radius: 3px; text-transform: uppercase;
+    }
+    .card-wishlist {
+      position: absolute; top: 10px; right: 12px; background: none; border: none;
+      font-size: 1.2rem; cursor: pointer; opacity: 0; transition: opacity 0.2s;
+    }
+    .product-card:hover .card-wishlist { opacity: 1; }
+    .card-body { padding: 1.2rem; }
+    .card-brand { font-size: 0.72rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.3rem; }
+    .card-name { font-weight: 600; font-size: 1rem; margin-bottom: 0.5rem; }
+    .card-rating { color: #f5b731; font-size: 0.82rem; margin-bottom: 0.8rem; }
+    .card-rating span { color: var(--muted); margin-left: 4px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 1rem; }
+    .card-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 1px; }
+    .card-price .original { font-size: 1rem; color: var(--muted); text-decoration: line-through; margin-left: 6px; }
+    .btn-add {
+      background: var(--accent); border: none; color: #fff;
+      width: 36px; height: 36px; border-radius: 50%; font-size: 1.2rem;
+      cursor: pointer; transition: opacity 0.2s; display: flex; align-items: center; justify-content: center;
+    }
+    .btn-add:hover { opacity: 0.8; }
+
+    /* ── CATEGORIES ── */
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.2rem; }
+    .cat-card {
+      border: 1px solid var(--border); border-radius: 8px; padding: 2rem 1.5rem;
+      text-align: center; cursor: pointer; transition: all 0.25s;
+      background: var(--card-bg);
+    }
+    .cat-card:hover { border-color: var(--accent); background: rgba(232,68,26,0.06); transform: translateY(-4px); }
+    .cat-icon { width: 80px; height: 70px; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem; display: block; margin-left: auto; margin-right: auto; }
+    .cat-label { font-weight: 600; font-size: 0.95rem; letter-spacing: 0.5px; }
+    .cat-count { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; }
+
+    /* ── BANNER ── */
+    .offer-banner {
+      background: linear-gradient(135deg, #1e0e08 0%, #2d1208 50%, #1e0e08 100%);
+      border: 1px solid rgba(232,68,26,0.3); border-radius: 12px;
+      padding: 4rem 3rem; display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 2rem; margin: 0 3rem;
+    }
+    .offer-banner h2 {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem);
+      letter-spacing: 2px; line-height: 1;
+    }
+    .offer-banner h2 span { color: var(--accent); }
+    .offer-banner p { color: var(--muted); margin-top: 0.8rem; font-size: 1rem; }
+    .countdown { display: flex; gap: 1.5rem; }
+    .cnt-box { text-align: center; }
+    .cnt-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem; letter-spacing: 2px;
+      color: var(--accent); line-height: 1; display: block;
+    }
+    .cnt-label { font-size: 0.7rem; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #080808; border-top: 1px solid var(--border);
+      padding: 4rem 3rem 2rem;
+    }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+    .footer-brand .logo { display: block; margin-bottom: 1rem; }
+    .footer-brand p { color: var(--muted); font-size: 0.9rem; line-height: 1.7; max-width: 280px; }
+    .footer-col h4 { font-size: 0.75rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--white); margin-bottom: 1.2rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.6rem; }
+    .footer-col ul li a { color: var(--muted); text-decoration: none; font-size: 0.88rem; transition: color 0.2s; }
+    .footer-col ul li a:hover { color: var(--white); }
+    .footer-bottom { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+    .footer-bottom p { color: var(--muted); font-size: 0.82rem; }
+    .social-links { display: flex; gap: 1rem; }
+    .social-links a { color: var(--muted); font-size: 1.1rem; text-decoration: none; transition: color 0.2s; }
+    .social-links a:hover { color: var(--accent); }
+
+    /* ── CART DRAWER ── */
+    .cart-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200;
+      opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+    .cart-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: 380px;
+      background: #111; border-left: 1px solid var(--border);
+      z-index: 201; transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column;
+    }
+    .cart-drawer.open { transform: translateX(0); }
+    .cart-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem; border-bottom: 1px solid var(--border);
+    }
+    .cart-head h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 2px; }
+    .btn-close { background: none; border: none; color: var(--white); font-size: 1.5rem; cursor: pointer; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+    .cart-item {
+      display: flex; gap: 1rem; align-items: center;
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 6px; padding: 0.8rem;
+    }
+    .cart-item-img { font-size: 2.5rem; width: 60px; text-align: center; }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-weight: 600; font-size: 0.9rem; }
+    .cart-item-price { color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; }
+    .cart-item-qty { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.3rem; }
+    .qty-btn { background: var(--border); border: none; color: var(--white); width: 22px; height: 22px; border-radius: 3px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; }
+    .cart-empty { text-align: center; color: var(--muted); padding: 3rem 1rem; }
+    .cart-empty span { font-size: 4rem; display: block; margin-bottom: 1rem; }
+    .cart-foot { padding: 1.5rem; border-top: 1px solid var(--border); }
+    .cart-total { display: flex; justify-content: space-between; font-weight: 600; font-size: 1.1rem; margin-bottom: 1.2rem; }
+    .cart-total-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--accent); }
+    .btn-checkout { width: 100%; background: var(--accent); border: none; color: #fff; padding: 1rem; font-size: 1rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; border-radius: 4px; cursor: pointer; transition: opacity 0.2s; }
+    .btn-checkout:hover { opacity: 0.85; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
+      background: #222; border: 1px solid var(--accent); color: var(--white);
+      padding: 0.8rem 2rem; border-radius: 4px; font-size: 0.9rem; font-weight: 500;
+      z-index: 300; transition: transform 0.3s ease;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .hero { text-align: center; padding: 0 1.5rem; justify-content: center; }
+      .hero-text p { margin: 1.5rem auto 0; }
+      .hero-btns { justify-content: center; }
+      section { padding: 3.5rem 1.5rem; }
+      .trust-bar { grid-template-columns: 1fr 1fr; padding: 1.8rem 1.5rem; }
+      .offer-banner { grid-template-columns: 1fr; margin: 0 1.5rem; text-align: center; }
+      .countdown { justify-content: center; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .cart-drawer { width: 100%; }
+      .qv-modal { grid-template-columns: 1fr; }
+      .newsletter-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">SOL<span>E</span></a>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#products">Shop</a></li>
+    <li><a href="#categories">Collections</a></li>
+    <li><a href="#new-arrivals">New Arrivals</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#footer">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="btn-cart" id="cartBtn">
+      🛒 Cart
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+    <button class="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-text">
+    <span class="hero-eyebrow">New Season Collection</span>
+    <h1>PREMIUM <em>FOOTWEAR</em><br>FOR EVERY STEP</h1>
+    <p>Discover the latest collection of sneakers, casual shoes, and formal footwear — crafted for comfort, designed for style.</p>
+    <div class="hero-btns">
+      <a href="#products" class="btn-primary">Shop Men</a>
+      <a href="#products" class="btn-outline">Shop Women</a>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item"><span class="ti-icon">🚚</span><span class="ti-label">Free Shipping</span><span class="ti-sub">On orders above ₹999</span></div>
+  <div class="trust-item"><span class="ti-icon">🔄</span><span class="ti-label">Easy Returns</span><span class="ti-sub">7-day return policy</span></div>
+  <div class="trust-item"><span class="ti-icon">🔒</span><span class="ti-label">Secure Payments</span><span class="ti-sub">100% protected checkout</span></div>
+  <div class="trust-item"><span class="ti-icon">⭐</span><span class="ti-label">10,000+ Happy Customers</span><span class="ti-sub">Rated 4.8/5 average</span></div>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>SNEAKERS</span><span class="dot">●</span>
+    <span>RUNNING</span><span class="dot">●</span>
+    <span>CASUAL</span><span class="dot">●</span>
+    <span>FORMAL</span><span class="dot">●</span>
+    <span>SANDALS</span><span class="dot">●</span>
+    <span>BOOTS</span><span class="dot">●</span>
+    <span>SPORTS</span><span class="dot">●</span>
+    <span>LIMITED EDITION</span><span class="dot">●</span>
+    <span>SNEAKERS</span><span class="dot">●</span>
+    <span>RUNNING</span><span class="dot">●</span>
+    <span>CASUAL</span><span class="dot">●</span>
+    <span>FORMAL</span><span class="dot">●</span>
+    <span>SANDALS</span><span class="dot">●</span>
+    <span>BOOTS</span><span class="dot">●</span>
+    <span>SPORTS</span><span class="dot">●</span>
+    <span>LIMITED EDITION</span><span class="dot">●</span>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <div class="sec-header">
+    <span class="sec-eyebrow">Fresh Arrivals</span>
+    <h2 class="sec-title">TRENDING NOW</h2>
+  </div>
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="sneakers">Sneakers</button>
+    <button class="filter-btn" data-filter="formal">Formal</button>
+    <button class="filter-btn" data-filter="sports">Sports</button>
+    <button class="filter-btn" data-filter="casual">Casual</button>
+    <button class="filter-btn" data-filter="boots">Boots</button>
+  </div>
+  <div class="product-grid" id="productGrid"></div>
+</section>
+
+<!-- BEST SELLERS -->
+<section style="background:#0a0e1a;">
+  <div class="sec-header">
+    <span class="sec-eyebrow">Customer Favourites</span>
+    <h2 class="sec-title">BEST SELLERS</h2>
+  </div>
+  <div class="product-grid" id="bestSellerGrid"></div>
+</section>
+
+<!-- NEW ARRIVALS -->
+<section id="new-arrivals">
+  <div class="sec-header">
+    <span class="sec-eyebrow">Just Dropped</span>
+    <h2 class="sec-title">NEW ARRIVALS</h2>
+  </div>
+  <div class="product-grid" id="newArrivalGrid"></div>
+</section>
+
+<!-- LIMITED EDITION -->
+<section style="background:#0a0e1a;">
+  <div class="sec-header">
+    <span class="sec-eyebrow">Exclusive Drop</span>
+    <h2 class="sec-title">LIMITED EDITION</h2>
+  </div>
+  <div class="product-grid" id="limitedGrid"></div>
+</section>
+
+<!-- CATEGORIES -->
+<section id="categories" style="background: #0a0a0a;">
+  <div class="sec-header">
+    <span class="sec-eyebrow">Browse By</span>
+    <h2 class="sec-title">CATEGORIES</h2>
+  </div>
+  <div class="cat-grid">
+    <div class="cat-card"><img class="cat-icon" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=160&auto=format&fit=crop&q=80" alt="Sneakers" /><div class="cat-label">Sneakers</div><div class="cat-count">48 Products</div></div>
+    <div class="cat-card"><img class="cat-icon" src="https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=160&auto=format&fit=crop&q=80" alt="Formal" /><div class="cat-label">Formal</div><div class="cat-count">32 Products</div></div>
+    <div class="cat-card"><img class="cat-icon" src="https://images.unsplash.com/photo-1520219306100-ec4afeeefe58?w=160&auto=format&fit=crop&q=80" alt="Boots" /><div class="cat-label">Boots</div><div class="cat-count">24 Products</div></div>
+    <div class="cat-card"><img class="cat-icon" src="https://images.unsplash.com/photo-1603487742131-4160ec999306?w=160&auto=format&fit=crop&q=80" alt="Sandals" /><div class="cat-label">Sandals</div><div class="cat-count">19 Products</div></div>
+    <div class="cat-card"><img class="cat-icon" src="https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=160&auto=format&fit=crop&q=80" alt="Running" /><div class="cat-label">Running</div><div class="cat-count">36 Products</div></div>
+    <div class="cat-card"><img class="cat-icon" src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=160&auto=format&fit=crop&q=80" alt="Sports" /><div class="cat-label">Sports</div><div class="cat-count">28 Products</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="background:#0a0a0a;">
+  <div class="sec-header">
+    <span class="sec-eyebrow">Our Story</span>
+    <h2 class="sec-title">ABOUT SOLE</h2>
+  </div>
+  <p style="max-width:700px;margin:0 auto;text-align:center;color:var(--muted);line-height:1.8;">SOLE was founded with one mission — bring premium, internationally-inspired footwear to every Indian household at honest prices. From sneakers to formal shoes, every pair is curated for quality, comfort, and timeless style.</p>
+</section>
+
+<!-- REVIEWS -->
+<section>
+  <div class="sec-header">
+    <span class="sec-eyebrow">Social Proof</span>
+    <h2 class="sec-title">CUSTOMER REVIEWS</h2>
+  </div>
+  <div class="review-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Best quality shoes and amazing delivery. Bilkul premium feel laga, packaging bhi top class thi.</p>
+      <div class="review-author"><div class="review-avatar">RS</div><div><div class="review-name">Rahul Sharma</div><div class="review-loc">Bhopal, MP</div></div></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Comfort level next level hai, ek hafte mein deliver ho gaya. Definitely ordering again!</p>
+      <div class="review-author"><div class="review-avatar">PK</div><div><div class="review-name">Priya Kapoor</div><div class="review-loc">Delhi</div></div></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★☆</div>
+      <p class="review-text">Quality ekdum premium, price bhi reasonable. Return process bhi bahut smooth raha.</p>
+      <div class="review-author"><div class="review-avatar">AK</div><div><div class="review-name">Aman Khanna</div><div class="review-loc">Pune</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter" style="background:var(--card-bg);">
+  <span class="sec-eyebrow">Stay In The Loop</span>
+  <h2 class="sec-title">JOIN OUR NEWSLETTER</h2>
+  <p style="color:var(--muted);margin-top:0.8rem;">Get early access to drops, exclusive offers & styling tips.</p>
+  <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Subscribed! Welcome to SOLE 🎉');">
+    <input type="email" placeholder="Enter your email" required />
+    <button class="btn-primary" type="submit">Subscribe</button>
+  </form>
+</section>
+<section id="offers" style="padding: 5rem 0;">
+  <div class="offer-banner">
+    <div>
+      <h2>FLAT <span>40% OFF</span><br>MONSOON SALE</h2>
+      <p>Limited time deal — use code <strong style="color:var(--accent)">SOLE40</strong> at checkout</p>
+      <a href="#products" class="btn-primary" style="margin-top:1.5rem;display:inline-block">Claim Offer</a>
+    </div>
+    <div class="countdown" id="countdown">
+      <div class="cnt-box"><span class="cnt-num" id="cntH">08</span><span class="cnt-label">Hours</span></div>
+      <div class="cnt-box"><span class="cnt-num" id="cntM">34</span><span class="cnt-label">Mins</span></div>
+      <div class="cnt-box"><span class="cnt-num" id="cntS">59</span><span class="cnt-label">Secs</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" style="background:#0a0a0a;">
+  <div class="sec-header">
+    <span class="sec-eyebrow">Our Story</span>
+    <h2 class="sec-title">CRAFTED FOR YOU</h2>
+  </div>
+  <p style="max-width:680px;margin:0 auto;text-align:center;color:var(--muted);line-height:1.8;">SOLE India ka leading premium footwear brand hai — sneakers, formal aur sports shoes ki widest range, sourced from top global brands, har step ke liye design kiya gaya comfort aur durability ke saath.</p>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="sec-header">
+    <span class="sec-eyebrow">What Customers Say</span>
+    <h2 class="sec-title">CUSTOMER REVIEWS</h2>
+  </div>
+  <div class="review-grid">
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Best quality shoes and amazing delivery. Packaging bhi bohot premium thi, will order again!</p>
+      <div class="review-author"><div class="review-avatar">RS</div><div><div class="review-name">Rahul Sharma</div><div class="review-loc">Mumbai</div></div></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Comfort level outstanding hai, ek dum office formals ke liye perfect. Highly recommend SOLE!</p>
+      <div class="review-author"><div class="review-avatar">PK</div><div><div class="review-name">Priya Kapoor</div><div class="review-loc">Delhi</div></div></div>
+    </div>
+    <div class="review-card">
+      <div class="review-stars">★★★★☆</div>
+      <p class="review-text">Sneakers ka fit aur finish dono top notch hai. Easy returns process ne mera trust badha diya.</p>
+      <div class="review-author"><div class="review-avatar">AV</div><div><div class="review-name">Aman Verma</div><div class="review-loc">Bengaluru</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter" style="background:#0a0e1a;">
+  <div class="sec-header">
+    <span class="sec-eyebrow">Stay Updated</span>
+    <h2 class="sec-title">JOIN OUR NEWSLETTER</h2>
+  </div>
+  <form class="newsletter-form" onsubmit="event.preventDefault(); showToast('Subscribed! Thank you 🎉');">
+    <input type="email" placeholder="Enter your email" required />
+    <button class="btn-primary" type="submit">Subscribe</button>
+  </form>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="logo">SOL<span>E</span></a>
+      <p>India ka number one premium footwear destination. Style, comfort, aur quality — ek hi jagah.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#">New Arrivals</a></li>
+        <li><a href="#">Men's</a></li>
+        <li><a href="#">Women's</a></li>
+        <li><a href="#">Kids'</a></li>
+        <li><a href="#">Sale</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Size Guide</a></li>
+        <li><a href="#">Track Order</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">FAQs</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About SOLE</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Sustainability</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 SOLE Footwear. All rights reserved.</p>
+    <div class="social-links">
+      <a href="#" title="Instagram">📸</a>
+      <a href="#" title="Facebook">👤</a>
+      <a href="#" title="Twitter">🐦</a>
+      <a href="#" title="YouTube">▶️</a>
+    </div>
+  </div>
+</footer>
+
+<!-- QUICK VIEW MODAL -->
+<div class="qv-overlay" id="qvOverlay">
+  <div class="qv-modal">
+    <button class="qv-close" id="qvCloseBtn">✕</button>
+    <div class="qv-img-col"><img id="qvImg" src="" alt="" /></div>
+    <div class="qv-info">
+      <div class="qv-brand" id="qvBrand"></div>
+      <div class="qv-name" id="qvName"></div>
+      <div class="card-rating" id="qvStars" style="margin-bottom:0.8rem;"></div>
+      <div class="qv-price" id="qvPrice"></div>
+      <div style="font-size:0.78rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:1.2rem;">Select Colour</div>
+      <div class="qv-swatches" id="qvSwatches"></div>
+      <div style="font-size:0.78rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;">Select Size (UK)</div>
+      <div class="qv-sizes" id="qvSizes"></div>
+      <button class="btn-primary" id="qvAddBtn" style="width:100%;margin-top:1rem;border:none;cursor:pointer;">Add to Cart</button>
+      <div class="qv-meta">
+        🚚 Free shipping on orders above ₹999<br>
+        🔄 7-day easy returns<br>
+        🔒 100% secure payment
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-head">
+    <h3>YOUR CART</h3>
+    <button class="btn-close" id="closeCart">✕</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty"><span>🛒</span>Aapka cart khali hai.<br>Kuch add karein!</div>
+  </div>
+  <div class="cart-foot" id="cartFoot" style="display:none">
+    <div class="cart-total"><span>Total</span><span class="cart-total-price" id="cartTotal">₹0</span></div>
+    <button class="btn-checkout">Checkout → </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  const products = [
+    { id:1, name:'AirMax Pro 360', brand:'Nike', price:7999, original:12999, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&auto=format&fit=crop&q=80', emoji:'👟', badge:'NEW', rating:4.8, reviews:312, category:'sneakers', colors:['#0F172A','#D4AF37','#FFFFFF'], sizes:[7,8,9,10,11], bestseller:true, newArrival:true, limited:false },
+    { id:2, name:'UltraBoost 22', brand:'Adidas', price:9499, original:14999, img:'https://images.unsplash.com/photo-1608231387042-66d1773d3028?w=400&auto=format&fit=crop&q=80', emoji:'🏃', badge:'HOT', rating:4.9, reviews:481, category:'sports', colors:['#0F172A','#1f6f4f'], sizes:[7,8,9,10], bestseller:true, newArrival:false, limited:false },
+    { id:3, name:'Classic Oxford', brand:'Clarks', price:4299, original:6999, img:'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=400&auto=format&fit=crop&q=80', emoji:'👞', badge:'', rating:4.5, reviews:98, category:'formal', colors:['#3b2a1a','#0F172A'], sizes:[8,9,10,11], bestseller:false, newArrival:false, limited:false },
+    { id:4, name:'Himalayan Trek', brand:'Wildcraft', price:5499, original:7999, img:'https://images.unsplash.com/photo-1520219306100-ec4afeeefe58?w=400&auto=format&fit=crop&q=80', emoji:'🥾', badge:'NEW', rating:4.6, reviews:145, category:'boots', colors:['#3b2a1a','#1a1a1a'], sizes:[8,9,10,11,12], bestseller:false, newArrival:true, limited:false },
+    { id:5, name:'StreetWalk Lite', brand:'Puma', price:3299, original:4999, img:'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&auto=format&fit=crop&q=80', emoji:'👟', badge:'SALE', rating:4.4, reviews:220, category:'casual', colors:['#D4AF37','#0F172A','#FFFFFF'], sizes:[7,8,9,10], bestseller:true, newArrival:false, limited:false },
+    { id:6, name:'React Infinity Run', brand:'Nike', price:11999, original:16999, img:'https://images.unsplash.com/photo-1587563871167-1ee9c731aefb?w=400&auto=format&fit=crop&q=80', emoji:'🏃', badge:'', rating:4.9, reviews:567, category:'sports', colors:['#0F172A','#D4AF37'], sizes:[8,9,10,11], bestseller:true, newArrival:false, limited:true },
+    { id:7, name:'Derby Luxe', brand:'Hush Puppies', price:5999, original:8999, img:'https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=400&auto=format&fit=crop&q=80', emoji:'👞', badge:'', rating:4.3, reviews:76, category:'formal', colors:['#3b2a1a'], sizes:[9,10,11], bestseller:false, newArrival:false, limited:true },
+    { id:8, name:'SlipOn Canvas', brand:'Vans', price:2899, original:3999, img:'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=400&auto=format&fit=crop&q=80', emoji:'👟', badge:'HOT', rating:4.7, reviews:389, category:'casual', colors:['#0F172A','#FFFFFF','#D4AF37'], sizes:[7,8,9,10,11], bestseller:false, newArrival:true, limited:true },
+  ];
+
+  let cart = [];
+  let activeFilter = 'all';
+
+  function stars(r) { return '★'.repeat(Math.floor(r)) + (r%1 ? '½' : '') + `<span>(${r})</span>`; }
+
+  function swatchesHTML(p) {
+    return `<div style="display:flex;gap:4px;margin-top:0.5rem;">${p.colors.map(c=>`<span style="width:14px;height:14px;border-radius:50%;background:${c};border:1px solid var(--border);display:inline-block;"></span>`).join('')}</div>`;
+  }
+
+  function cardHTML(p) {
+    return `
+      <div class="product-card" data-id="${p.id}">
+        <div class="card-img">
+          ${p.badge ? `<span class="card-badge">${p.badge}</span>` : ''}
+          <img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;transition:transform 0.4s;" onmouseover="this.style.transform='scale(1.07)'" onmouseout="this.style.transform='scale(1)'" />
+          <button class="card-wishlist" title="Wishlist">🤍</button>
+          <button class="card-quickview" data-id="${p.id}" title="Quick View" style="position:absolute;left:0;right:0;bottom:0;background:rgba(15,23,42,0.88);color:var(--white);border:none;padding:0.5rem;font-size:0.78rem;letter-spacing:1px;text-transform:uppercase;cursor:pointer;opacity:0;transition:opacity 0.2s;">Quick View</button>
+        </div>
+        <div class="card-body">
+          <div class="card-brand">${p.brand}</div>
+          <div class="card-name">${p.name}</div>
+          <div class="card-rating">${stars(p.rating)} <span>${p.reviews} reviews</span></div>
+          ${swatchesHTML(p)}
+          <div class="card-footer">
+            <div class="card-price">₹${p.price.toLocaleString('en-IN')}<span class="original">₹${p.original.toLocaleString('en-IN')}</span></div>
+            <button class="btn-add" data-id="${p.id}" title="Add to cart">+</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function wireCardEvents(container) {
+    container.querySelectorAll('.btn-add').forEach(btn => {
+      btn.addEventListener('click', e => { e.stopPropagation(); addToCart(+btn.dataset.id); });
+    });
+    container.querySelectorAll('.card-quickview').forEach(btn => {
+      btn.addEventListener('click', e => { e.stopPropagation(); openQuickView(+btn.dataset.id); });
+    });
+    container.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('mouseenter', () => { card.querySelector('.card-quickview').style.opacity = '1'; });
+      card.addEventListener('mouseleave', () => { card.querySelector('.card-quickview').style.opacity = '0'; });
+      card.addEventListener('click', () => openQuickView(+card.dataset.id));
+    });
+  }
+
+  function renderProducts(filter = 'all') {
+    const grid = document.getElementById('productGrid');
+    const filtered = filter === 'all' ? products : products.filter(p => p.category === filter);
+    grid.innerHTML = filtered.map(cardHTML).join('');
+    wireCardEvents(grid);
+  }
+
+  function renderExtraGrids() {
+    const bestEl = document.getElementById('bestSellerGrid');
+    const newEl = document.getElementById('newArrivalGrid');
+    const limEl = document.getElementById('limitedGrid');
+    bestEl.innerHTML = products.filter(p => p.bestseller).map(cardHTML).join('');
+    newEl.innerHTML = products.filter(p => p.newArrival).map(cardHTML).join('');
+    limEl.innerHTML = products.filter(p => p.limited).map(cardHTML).join('');
+    [bestEl, newEl, limEl].forEach(wireCardEvents);
+  }
+
+  function openQuickView(id) {
+    const p = products.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('qvImg').src = p.img;
+    document.getElementById('qvBrand').textContent = p.brand;
+    document.getElementById('qvName').textContent = p.name;
+    document.getElementById('qvStars').innerHTML = stars(p.rating);
+    document.getElementById('qvPrice').innerHTML = `₹${p.price.toLocaleString('en-IN')}<span class="qv-orig">₹${p.original.toLocaleString('en-IN')}</span>`;
+    document.getElementById('qvSwatches').innerHTML = p.colors.map((c,i)=>`<span class="qv-swatch ${i===0?'active':''}" style="background:${c}" onclick="this.parentElement.querySelectorAll('.qv-swatch').forEach(s=>s.classList.remove('active'));this.classList.add('active')"></span>`).join('');
+    document.getElementById('qvSizes').innerHTML = p.sizes.map((s,i)=>`<span class="qv-size ${i===0?'active':''}" onclick="this.parentElement.querySelectorAll('.qv-size').forEach(x=>x.classList.remove('active'));this.classList.add('active')">UK ${s}</span>`).join('');
+    document.getElementById('qvAddBtn').onclick = () => { addToCart(id); closeQuickView(); };
+    document.getElementById('qvOverlay').classList.add('open');
+  }
+  function closeQuickView() { document.getElementById('qvOverlay').classList.remove('open'); }
+
+  function addToCart(id) {
+    const p = products.find(x => x.id === id);
+    const existing = cart.find(x => x.id === id);
+    if (existing) existing.qty++;
+    else cart.push({ ...p, qty: 1 });
+    updateCartUI();
+    showToast(`${p.name} — cart mein add ho gaya! 🎉`);
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(x => x.id !== id);
+    updateCartUI();
+  }
+
+  function changeQty(id, delta) {
+    const item = cart.find(x => x.id === id);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) removeFromCart(id);
+    else updateCartUI();
+  }
+
+  function updateCartUI() {
+    const count = cart.reduce((s, x) => s + x.qty, 0);
+    document.getElementById('cartCount').textContent = count;
+    const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+    document.getElementById('cartTotal').textContent = '₹' + total.toLocaleString('en-IN');
+    const itemsEl = document.getElementById('cartItems');
+    const footEl = document.getElementById('cartFoot');
+    if (!cart.length) {
+      itemsEl.innerHTML = '<div class="cart-empty"><span>🛒</span>Aapka cart khali hai.<br>Kuch add karein!</div>';
+      footEl.style.display = 'none';
+    } else {
+      footEl.style.display = 'block';
+      itemsEl.innerHTML = cart.map(x => `
+        <div class="cart-item">
+          <div class="cart-item-img"><img src="${x.img}" alt="${x.name}" style="width:56px;height:56px;object-fit:cover;border-radius:4px;" /></div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${x.name}</div>
+            <div class="cart-item-price">₹${(x.price * x.qty).toLocaleString('en-IN')}</div>
+            <div class="cart-item-qty">
+              <button class="qty-btn" data-id="${x.id}" data-delta="-1">−</button>
+              <span>${x.qty}</span>
+              <button class="qty-btn" data-id="${x.id}" data-delta="1">+</button>
+              <button class="qty-btn" data-id="${x.id}" data-delta="-99" style="background:#3a0a0a;margin-left:6px">🗑</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      document.querySelectorAll('.qty-btn').forEach(b => {
+        b.addEventListener('click', () => changeQty(+b.dataset.id, +b.dataset.delta));
+      });
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // Cart open/close
+  const overlay = document.getElementById('cartOverlay');
+  const drawer = document.getElementById('cartDrawer');
+  document.getElementById('cartBtn').addEventListener('click', () => {
+    overlay.classList.add('open'); drawer.classList.add('open');
+  });
+  document.getElementById('closeCart').addEventListener('click', () => {
+    overlay.classList.remove('open'); drawer.classList.remove('open');
+  });
+  overlay.addEventListener('click', () => {
+    overlay.classList.remove('open'); drawer.classList.remove('open');
+  });
+
+  // Filters
+  document.getElementById('filterBar').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    renderProducts(activeFilter);
+  });
+
+  // Quick View close handlers
+  document.getElementById('qvCloseBtn').addEventListener('click', closeQuickView);
+  document.getElementById('qvOverlay').addEventListener('click', e => {
+    if (e.target.id === 'qvOverlay') closeQuickView();
+  });
+
+  // Countdown
+  let endTime = Date.now() + 8*3600000 + 34*60000 + 59000;
+  function tick() {
+    const diff = Math.max(0, endTime - Date.now());
+    const h = Math.floor(diff / 3600000), m = Math.floor((diff % 3600000) / 60000), s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cntH').textContent = String(h).padStart(2,'0');
+    document.getElementById('cntM').textContent = String(m).padStart(2,'0');
+    document.getElementById('cntS').textContent = String(s).padStart(2,'0');
+    if (diff > 0) requestAnimationFrame(tick);
+  }
+  tick();
+
+  renderProducts();
+  renderExtraGrids();
+</script>
+</body>
+</html>
